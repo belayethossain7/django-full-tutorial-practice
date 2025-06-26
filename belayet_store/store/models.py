@@ -13,9 +13,10 @@ class Promotion(models.Model):
 
 
 class Product(models.Model):
-    title = models.models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    slug = models.SlugField()
     description = models.TextField()
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    unit_price = models.DecimalField(max_digits=6, decimal_places=2)
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(Collection, models.PROTECT)
@@ -32,7 +33,7 @@ class Customer(models.Model):
         (MEMBERSHIP_GOLD,'GOLD')
     ]
     first_name = models.CharField(max_length=255)
-    last_name = models.Charfield(max_length=255)
+    last_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True)
     phone = models.CharField(max_length=255)
     birth_date = models.DateField(null=True)
@@ -56,6 +57,7 @@ class Order(models.Model):
 class Address(models.Model):
     street = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
+    zip = models.PositiveIntegerField(null=True)
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
 
 
