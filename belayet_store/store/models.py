@@ -4,6 +4,11 @@ from django.db import models
 
 class Collection(models.Model):
     title = models.CharField(max_length=255)
+    featured_product = models.ForeignKey('Product', on_delete=models.SET_NULL, null=True, related_name='+')
+
+class Promotion(models.Model):
+    description = models.CharField(max_length=255)
+    discount = models.FloatField()
 
 
 
@@ -14,6 +19,7 @@ class Product(models.Model):
     inventory = models.IntegerField()
     last_update = models.DateTimeField(auto_now=True)
     collection = models.ForeignKey(Collection, models.PROTECT)
+    promotions = models.ManyToManyField(Promotion)
 
 class Customer(models.Model):
     MEMBERSHIP_BRONZE = 'B'
@@ -61,3 +67,11 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveSmallIntegerField()
     unit_price = models.DecimalField(max_digits=6, decimal_places=2)
+
+class Cart(models.Model):
+    created_at = models.DateTimeField(auto_now_add=True)
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)   # when need to one to many ,,that time use "ForeignKey" in the child class define parent,,that means child class is many
+    quantity = models.PositiveSmallIntegerField()
